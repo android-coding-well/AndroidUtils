@@ -1,7 +1,7 @@
 # AndroidUtils
 android 工具库
 
-* 如果需要用到lib_common,做法如下：
+* 如果需要引用此库,做法如下：
 * Add it in your root build.gradle at the end of repositories:
 ```
 allprojects {
