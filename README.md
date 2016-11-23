@@ -14,7 +14,7 @@ allprojects {
 * and then,add the dependecy:
 ```
 dependencies {
-	        compile 'com.github.huweijian5:CommonUtil2:latest_version'
+	        compile 'com.github.huweijian5:AndroidUtils:latest_version'
 }
 ```
 * 其中latest_version请到[releases](https://github.com/huweijian5/AndroidUtils/releases)中查看
