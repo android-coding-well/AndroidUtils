@@ -1,4 +1,5 @@
-apply plugin: 'com.android.application'
+//apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 
 group='com.github.huweijian5'
@@ -7,7 +8,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion '25.0.0'
     defaultConfig {
-        applicationId "com.junmeng.tools"
+        //applicationId "com.junmeng.tools"
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
