@@ -69,7 +69,7 @@ public class ACache {
 
 
     /** 最大缓存空间*/
-    private static final int MAX_SIZE = 1024 * 1024 * 100; // 100 mb
+    private static final int MAX_SIZE = 1024 * 1024 * 300; // 100 mb
     /** 无限缓存数量*/
     private static final int MAX_COUNT = Integer.MAX_VALUE; // 不限制存放数据的数量
 
