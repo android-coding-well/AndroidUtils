@@ -15,7 +15,6 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.support.annotation.RequiresPermission;
-import android.support.v7.app.AlertDialog;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.webkit.CookieManager;
@@ -31,7 +30,6 @@ import java.util.List;
  */
 public class NetUtil {
 
-    private static boolean isIgnoreNetStatus = false;
 
     private NetUtil() {
         throw new UnsupportedOperationException(
@@ -394,46 +392,6 @@ public class NetUtil {
 
     }
 
-    /**
-     * 非wifi环境下显示提醒
-     *
-     * @param context
-     */
-    public static void showHintWhenNonWifi(final Context context) {
-        if (!isIgnoreNetStatus) {
 
-            NetworkInfo networkInfo = getActiveNetworkInfo(context);
-
-            if (networkInfo != null && networkInfo.isAvailable()) {
-                if (networkInfo.getType() != ConnectivityManager.TYPE_WIFI) {// 非WiFi环境
-                    Dialog alertDialog = new AlertDialog.Builder(context)
-                            .setTitle("温馨提醒")
-                            .setMessage("当前处在非WIFI网络中，是否继续？")
-                            .setNegativeButton("忽略", new OnClickListener() {
-
-                                @Override
-                                public void onClick(DialogInterface dialog,
-                                                    int which) {
-                                    isIgnoreNetStatus = true;
-                                }
-                            })
-                            .setPositiveButton("去设置WIFI",
-                                    new OnClickListener() {
-
-                                        @Override
-                                        public void onClick(
-                                                DialogInterface dialog,
-                                                int which) {
-                                            Intent intent = new Intent();
-                                            intent.setAction("android.net.wifi.PICK_WIFI_NETWORK");
-                                            context.startActivity(intent);
-
-                                        }
-                                    }).create();
-                    alertDialog.show();
-                }
-            }
-        }
-    }
 
 }
