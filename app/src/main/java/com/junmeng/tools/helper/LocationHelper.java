@@ -34,12 +34,29 @@ public class LocationHelper {
 
     private OnLocationChangeListener onLocationChangeListener;
 
+    private boolean isConstantLocation=true;//是否是否连续定位
+
     public LocationHelper(Context context) {
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     }
 
     public void setOnLocationChangeListener(OnLocationChangeListener listener) {
         this.onLocationChangeListener = listener;
+    }
+
+    /**
+     * 设置是否连续定位
+     */
+    public void isConstantLocation(boolean  isConstant){
+        isConstantLocation=isConstant;
+    }
+
+    /**
+     * 定位是否连续
+     * @return
+     */
+    public boolean isConstantLocation(){
+        return isConstantLocation;
     }
 
     /**
@@ -85,23 +102,15 @@ public class LocationHelper {
     /**
      * 开始定位
      */
-    @RequiresPermission(anyOf = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
-    public void startLocation() {
-        //获取Location
-        Location location = locationManager.getLastKnownLocation(locationProvider);
-        if (location != null) {
-            //不为空,显示地理位置经纬度
-            // showLocation(location);
-            String locationStr = "纬度：" + location.getLatitude() + "\n"
-                    + "经度：" + location.getLongitude();
-            Log.e(TAG, locationStr);
-            if (onLocationChangeListener != null) {
-                onLocationChangeListener.onLocationChange(location);
-            }
+     @RequiresPermission(anyOf = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
+    public boolean startLocation() {
+        if( !prepare()){
+            return false;
         }
         //监视地理位置变化
         //参数：地理位置提供器、监听位置变化的时间间隔、位置变化的距离间隔、LocationListener监听器
         locationManager.requestLocationUpdates(locationProvider, minTime, minDistance, locationListener);
+        return true;
     }
 
     /**
@@ -129,7 +138,7 @@ public class LocationHelper {
      *
      * @return
      */
-    @RequiresPermission(anyOf = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
+     @RequiresPermission(anyOf = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
     public Location getLastKnownLocation() {
         if (locationProvider != null) {
             return locationManager.getLastKnownLocation(locationProvider);
@@ -141,7 +150,7 @@ public class LocationHelper {
 
         @Override
         public void onStatusChanged(String provider, int status, Bundle arg2) {
-            Log.e(TAG, "onStatusChanged:" + provider+",status="+status);
+
         }
 
         @Override
@@ -162,6 +171,9 @@ public class LocationHelper {
             Log.e(TAG, locationStr);
             if (onLocationChangeListener != null) {
                 onLocationChangeListener.onLocationChange(location);
+            }
+            if(!isConstantLocation){
+                close();
             }
         }
     };
