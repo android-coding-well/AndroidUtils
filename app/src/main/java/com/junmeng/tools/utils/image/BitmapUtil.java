@@ -1,11 +1,14 @@
 package com.junmeng.tools.utils.image;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.media.ThumbnailUtils;
+import android.os.Build;
 
 import java.io.BufferedOutputStream;
 import java.io.Closeable;
@@ -410,6 +413,27 @@ public class BitmapUtil {
         } else {
             return upperBound;
         }
+    }
+
+    /**
+     * 将vector资源转为Bitmap
+     * @param context
+     * @param vectorDrawableId
+     * @return
+     */
+    public static Bitmap getBitmap(Context context, int vectorDrawableId) {
+        Bitmap bitmap=null;
+        if (Build.VERSION.SDK_INT>Build.VERSION_CODES.LOLLIPOP){
+            Drawable vectorDrawable = context.getDrawable(vectorDrawableId);
+            bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(),
+                    vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+            vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            vectorDrawable.draw(canvas);
+        }else {
+            bitmap = BitmapFactory.decodeResource(context.getResources(), vectorDrawableId);
+        }
+        return bitmap;
     }
 
 }
