@@ -435,5 +435,29 @@ public class BitmapUtil {
         }
         return bitmap;
     }
+	/**
+     * 根据vector资源id获得Bitmap
+     * 需要在build.gradle中配置
+     * defaultConfig {
+     * vectorDrawables.useSupportLibrary = true
+     * }
+     *
+     * @param context
+     * @param vectorDrawableId
+     * @return
+     */
+    public static Bitmap getBitmapFromVectorDrawable(Context context, int vectorDrawableId) {
+        Drawable drawable = AppCompatDrawableManager.get().getDrawable(context, vectorDrawableId);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            drawable = (DrawableCompat.wrap(drawable)).mutate();
+        }
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
+                drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
+    }
 
 }
