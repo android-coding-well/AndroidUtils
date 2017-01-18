@@ -54,7 +54,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * 缓存管理工具
+ * 缓存管理工具,偏好参数设置请用SPUtil
  */
 public class ACache {
 

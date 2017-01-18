@@ -25,8 +25,11 @@ public class DownloadAPKHelper {
     private File downloadFile;
 
     private long myDownloadReference;
+    private boolean isUrlVaild = false;//url是否可用
 
     /**
+     * 如果url不合法则无法使用此对象
+     *
      * @param context
      * @param appName     应用名
      * @param description 应用描述
@@ -36,14 +39,52 @@ public class DownloadAPKHelper {
         this.context = context;
         downloadManager = (DownloadManager) context
                 .getSystemService(Context.DOWNLOAD_SERVICE);
-        Uri uri = Uri
-                .parse(url);
-        request = new Request(uri);
-        request.setTitle(appName);
-        request.setDescription(description);
-        registerDownloadCompleteReceiver();
-        registerNotificationClickedReceiver();
+        try {
+            Uri uri = Uri
+                    .parse(url);
+            request = new Request(uri);
+            request.setTitle(appName);
+            request.setDescription(description);
+            registerDownloadCompleteReceiver();
+            registerNotificationClickedReceiver();
+            isUrlVaild = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
+
+    /**
+     * 如果url不合法则无法使用此对象
+     *
+     * @param context
+     * @param url     下载地址
+     */
+    public DownloadAPKHelper(Context context, String url) {
+        this.context = context;
+        downloadManager = (DownloadManager) context
+                .getSystemService(Context.DOWNLOAD_SERVICE);
+        try {
+            Uri uri = Uri
+                    .parse(url);
+            request = new Request(uri);
+            registerDownloadCompleteReceiver();
+            registerNotificationClickedReceiver();
+            isUrlVaild = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 设置的URL是否可用，如果不可用，则其他接口都不能使用
+     *
+     * @return
+     */
+    public boolean isUrlVaild() {
+        return isUrlVaild;
+    }
+
 
     /**
      * 返回request，可用于更多参数设置
@@ -58,14 +99,19 @@ public class DownloadAPKHelper {
      * 只允许在wifi下下载
      */
     public void setOnlyWifi() {
-        request.setAllowedNetworkTypes(Request.NETWORK_WIFI);
+        if (request != null) {
+
+            request.setAllowedNetworkTypes(Request.NETWORK_WIFI);
+        }
     }
 
     /**
      * 用于设置下载时时候在状态栏显示通知信息
      */
     public void setNotificationVisibility(int visibility) {
-        request.setNotificationVisibility(visibility);
+        if (request != null) {
+            request.setNotificationVisibility(visibility);
+        }
     }
 
     /**
@@ -74,11 +120,13 @@ public class DownloadAPKHelper {
      * @param file
      */
     public void setSavePath(File file) {
-        if (file.exists() && file.isFile()) {
-            file.delete();
+        if (request != null) {
+            if (file.exists() && file.isFile()) {
+                file.delete();
+            }
+            this.downloadFile = file;
+            request.setDestinationUri(Uri.fromFile(downloadFile));
         }
-        this.downloadFile = file;
-        request.setDestinationUri(Uri.fromFile(downloadFile));
     }
 
     /**
@@ -87,7 +135,9 @@ public class DownloadAPKHelper {
      * @param title
      */
     public void setTitle(String title) {
-        request.setTitle(title);
+        if (request != null) {
+            request.setTitle(title);
+        }
     }
 
     /**
@@ -96,11 +146,14 @@ public class DownloadAPKHelper {
      * @param description
      */
     public void setDescription(String description) {
-        request.setDescription(description);
+        if (request != null) {
+            request.setDescription(description);
+        }
     }
 
     /**
      * 获得reference,可用于停止下载
+     *
      * @return
      */
     public long getMyDownloadReference() {
@@ -111,7 +164,9 @@ public class DownloadAPKHelper {
      * 开始下载
      */
     public void startDownload() {
-        myDownloadReference = downloadManager.enqueue(request);
+        if (request != null) {
+            myDownloadReference = downloadManager.enqueue(request);
+        }
     }
 
 
