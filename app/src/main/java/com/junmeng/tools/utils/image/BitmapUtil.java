@@ -9,6 +9,8 @@ import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.media.ThumbnailUtils;
 import android.os.Build;
+import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.widget.AppCompatDrawableManager;
 
 import java.io.BufferedOutputStream;
 import java.io.Closeable;
